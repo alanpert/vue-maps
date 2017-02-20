@@ -1,6 +1,7 @@
 # vue-maps
 
 > A Vue.js project
+> Vue.js + browserify + vueify + google maps
 
 ## Build Setup
 
