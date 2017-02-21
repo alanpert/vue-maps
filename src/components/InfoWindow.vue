@@ -13,22 +13,15 @@ export default {
   },
   data() {
     return {
-      infoWindow: {}
+      infoWindow: {},
+      vcontent: ""
     }
   },
   created() {
     console.log("InfoWindow Created");
-    var contentString = '<div>'+
-     '<div>'+
-     '</div>'+
-     '<h1 class="firstHeading">Title</h1>'+
-     '<div>'+
-     '<p>Description' +
-     '</p>'+
-     '</div>'+
-     '</div>';
+    this.contentUpdate();
     this.infoWindow = new google.maps.InfoWindow({
-      content: contentString
+      content: this.vcontent
     });
     if (this.infoopen) {
       var $this = this;
@@ -48,16 +41,37 @@ export default {
       }
     },
     linkedmarker: function() {
+      this.contentUpdate();
+      this.infoWindow.setContent(this.vcontent);
       this.openInfoWindow();
     }
   },
   methods: {
     openInfoWindow() {
       this.infoWindow.open(this.vmap, this.linkedmarker);
+    },
+    contentUpdate() {
+      this.vcontent = '<div class="infowindow">'+
+          '<div>'+
+          '</div>'+
+          '<h1 class="firstHeading">' + this.linkedmarker.title + '</h1>'+
+          '<div class="mapimg"><img src="' + this.linkedmarker.imgurl + '"></div>'+
+        '</div>';
     }
   }
 }
 </script>
 
 <style lang="scss">
+.infowindow {
+  h1 {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  .mapimg {
+    img {
+      max-width: 70px;
+    }
+  }
+}
 </style>
