@@ -22,6 +22,8 @@ export default {
     this.addtoCluster();
     this.thisMarker.setPosition(this.moptions.position);
     this.thisMarker.setMap(this.vmap);
+    this.setEmitListeners();
+
     // Pega o nome da localidade
     this.getName();
 
@@ -29,12 +31,16 @@ export default {
     this.thisMarker.addListener('drag', function() {
       this.moveMarker();
     }.bind(this));
-
+    
     this.thisMarker.addListener('click', function() {
       this.clickMarker();
     }.bind(this));
   },
   methods: {
+    setEmitListeners() {
+      // Adiciona os listeners de $emit
+      this.$parent.$on('openClickedMarkerInfo', this.clickedMarkerInfo);
+    },
     moveMarker() {
       // Atualiza posição do marker ao mover
       this.moptions.position.lat = this.thisMarker.getPosition().lat();
@@ -66,6 +72,12 @@ export default {
           }
         }
       });
+    },
+    clickedMarkerInfo(marker) {
+      // "Clica" no marker se o obj que está vindo do Click nos Filtros é o mesmo desse marker
+      if (this.moptions == marker) {
+        this.clickMarker();
+      }
     }
   }
 }

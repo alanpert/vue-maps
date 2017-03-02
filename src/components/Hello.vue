@@ -2,14 +2,21 @@
 <div id="mapcontainer">
 
   <section class="map-wrapper clearfix">
+    <!-- MAPA -->
     <div id="mapg">
-      <div class="">
+      <!-- INFOWINDOW -->
+      <div>
         <v-infowindow v-if="infoWindow.created" :vmap="map" :infoopen="infoWindow.show" :linkedmarker="infoWindow.linkedMarker"></v-infowindow>
       </div>
+
+      <!-- MARKERS -->
       <div>
         <v-marker v-for="m in markers" :moptions="m" :vmap="map" :locationname="locationname"></v-marker>
       </div>
     </div>
+    <!-- /MAPA -->
+
+    <!-- JANELA DE INFORMAÇOES NA LATERAL -->
     <div class="infos">
       <h2> {{selectedMarker.title}} </h2>
       <p class="location"> {{selectedMarker.locationname}} </p>
@@ -22,6 +29,7 @@
     </div>
   </section>
 
+  <!-- FILTROS -->
   <section class="filter">
     <input type="text" name="" value="" placeholder="Search..." v-model="filterinput">
     <div class="item-container" v-for="m in filteredItems" @click="clickItemFilter(m)">
@@ -46,7 +54,8 @@ export default {
       mapOptions: {
         center: { lat: 48.8538302, lng: 2.2982161 },
         scrollwheel: false,
-        zoom: 8
+        zoom: 8,
+        streetViewControl: false,
       },
       markerClusterobj: {},
       infoWindow: {
@@ -72,6 +81,7 @@ export default {
   },
   computed: {
     filteredItems() {
+      // Filtro para mostrar os itens ao Digitar no campo Input (Filtra pelo nome e pela localidade)
       var $this = this;
       return this.markers.filter(function(item) {
         return item.title.toLowerCase().indexOf($this.filterinput.toLowerCase()) > -1 || item.locationname.toLowerCase().indexOf($this.filterinput.toLowerCase()) > -1
@@ -93,6 +103,7 @@ export default {
       this.markerClusterobj = new MarkerClusterer(this.map, this.markerClusterobj, {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
     },
     loadjson() {
+      // Carrega o arquivo "this.jsonURL" com os markers já adicionados
       var $this = this;
       console.log("---Load Json");
       $.ajax({
@@ -171,15 +182,16 @@ export default {
       this.showInfoWindow(objMarker);
     },
     closeInfoWindow() {
+      // Fecha InfoWindow
       this.infoWindow.show = false;
     },
     clickItemFilter(marker) {
+      // Ao clicar em um item do Filtro (Mostra o Marker e abre a InfoWindow)
       console.log("@Click Item Filter");
-      // console.log(marker);
       this.selectedMarker = marker;
       this.map.setZoom(14);
       this.map.panTo(marker.position);
-      // this.showInfos(marker);
+      this.$emit('openClickedMarkerInfo', marker);
     }
   },
   components: {

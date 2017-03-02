@@ -34,6 +34,7 @@ export default {
   },
   watch: {
     infoopen: function(val) {
+      // Listener para saber se o InfoWindow já está fechado ou aberto
       if (val) {
         this.openInfoWindow();
       } else {
@@ -41,6 +42,7 @@ export default {
       }
     },
     linkedmarker: function() {
+      // Listener caso mude o Marker (caso usuário clique em outro marker)
       this.contentUpdate();
       this.infoWindow.setContent(this.vcontent);
       this.openInfoWindow();
@@ -48,9 +50,11 @@ export default {
   },
   methods: {
     openInfoWindow() {
+      // Abre o InfoWindow
       this.infoWindow.open(this.vmap, this.linkedmarker);
     },
     contentUpdate() {
+      // Atualiza conteudo dinâmico
       this.vcontent = '<div class="infowindow">'+
           '<div>'+
           '</div>'+
